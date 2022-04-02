@@ -12,18 +12,15 @@ import { Divider } from "react-native-elements";
 import { useNavigation } from "@react-navigation/native";
 import useDebounce from "../hooks/useDebounce";
 
-const AutocompleteScreen = () => {
-    const [search, setSearch] = useState("");
+const AutocompleteScreen = ({ route }) => {
+    const text = route?.params?.text;
+    const [search, setSearch] = useState("" || text);
     const [data, setData] = useState([]);
     const debouncedSearch = useDebounce(search, 800);
     const navigation = useNavigation();
     const url = "https://movie-search-api-mini.herokuapp.com/autocomplete/";
 
-    useEffect(() => {
-        fetchData(search);
-    }, [debouncedSearch]);
-
-    const fetchData = async (search) => {
+    useEffect(async () => {
         if (search.length <= 2) {
             setData([]);
             return;
@@ -31,8 +28,9 @@ const AutocompleteScreen = () => {
 
         const resp = await fetch(url + search);
         const data = await resp.json();
+
         setData(data);
-    };
+    }, [debouncedSearch]);
 
     const updateSearch = (search) => {
         setSearch(search);
@@ -46,8 +44,8 @@ const AutocompleteScreen = () => {
                     routes: [
                         { name: "AppTabsNavigator" },
                         {
-                            name: "MovieScreen",
-                            params: { movie: item },
+                            name: "SearchScreen",
+                            params: { search: item.name },
                         },
                     ],
                 })
@@ -57,13 +55,27 @@ const AutocompleteScreen = () => {
         </TouchableOpacity>
     );
 
+    const onSubmitEditing = () => {
+        navigation.reset({
+            routes: [
+                { name: "AppTabsNavigator" },
+                {
+                    name: "SearchScreen",
+                    params: { search: search },
+                },
+            ],
+        });
+    };
+
     return (
         <View style={[styles.container, styles.marginTop]}>
             <SearchBar
+                autoFocus
                 placeholder="Поиск..."
                 onChangeText={updateSearch}
                 value={search}
                 inputStyle={styles.input}
+                onSubmitEditing={onSubmitEditing}
             />
             <Divider
                 style={styles.divider}
@@ -74,6 +86,8 @@ const AutocompleteScreen = () => {
                 data={data}
                 renderItem={renderItem}
                 keyExtractor={(item) => item.id}
+                showsVerticalScrollIndicator={false}
+                keyboardShouldPersistTaps="handled"
             />
         </View>
     );
@@ -95,7 +109,7 @@ const styles = StyleSheet.create({
     item: {
         justifyContent: "center",
         marginVertical: 5,
-        minHeight: 48,
+        minHeight: 46,
     },
     title: {
         fontSize: 16,

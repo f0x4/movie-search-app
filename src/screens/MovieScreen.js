@@ -1,8 +1,6 @@
-import { BackHandler, StatusBar, StyleSheet, Text, View } from "react-native";
+import { StatusBar, StyleSheet, View } from "react-native";
 import React from "react";
-import { Image } from "react-native-elements";
-import { useNavigation } from "@react-navigation/native";
-import Picture from "../components/Picture";
+
 import MovieHeader from "../components/MovieHeader";
 import MovieButtons from "../components/MovieButtons";
 
@@ -12,7 +10,7 @@ const MovieScreen = ({ route }) => {
     return (
         <View style={styles.container}>
             <MovieHeader movie={movie} />
-            <MovieButtons />
+            <MovieButtons movie={movie} />
         </View>
     );
 };

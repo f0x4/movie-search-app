@@ -9,14 +9,17 @@ import React from "react";
 import { Icon } from "react-native-elements";
 import { useNavigation } from "@react-navigation/native";
 
-const FakeSearch = () => {
+const FakeSearch = ({ text }) => {
     const navigation = useNavigation();
+    const searchText = text || "Найти фильм";
 
     return (
         <TouchableOpacity
             style={[styles.container, styles.shadow]}
             onPress={() => {
-                navigation.navigate("AutocompleteScreen");
+                navigation.navigate("AutocompleteScreen", {
+                    text: !text ? "" : text,
+                });
             }}
         >
             <Icon
@@ -26,7 +29,9 @@ const FakeSearch = () => {
                 color="#9aa0a6"
                 name="search"
             />
-            <Text style={styles.text}>Найти фильм</Text>
+            <Text style={styles.text} numberOfLines={1} ellipsizeMode="middle">
+                {searchText}
+            </Text>
         </TouchableOpacity>
     );
 };

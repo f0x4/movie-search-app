@@ -1,11 +1,11 @@
 import { StyleSheet, Text, View } from "react-native";
 import React from "react";
-import Picture from "./Picture";
+import Poster from "./Poster";
 
 const MovieHeader = ({ movie }) => {
     return (
         <View style={styles.container}>
-            <Picture width={100} img={movie.img} />
+            <Poster width={100} img={movie.img} />
             <View style={styles.titleContainer}>
                 <Text style={styles.text}>{movie.name}</Text>
                 <Text style={styles.color}>{movie.year}</Text>
@@ -21,6 +21,7 @@ const styles = StyleSheet.create({
         flexDirection: "row",
     },
     titleContainer: {
+        flex: 1,
         marginLeft: 20,
     },
     text: {
