@@ -29,7 +29,7 @@ const FakeSearch = ({ text }) => {
                 color="#9aa0a6"
                 name="search"
             />
-            <Text style={styles.text} numberOfLines={1} ellipsizeMode="middle">
+            <Text style={styles.text} numberOfLines={1} ellipsizeMode="tail">
                 {searchText}
             </Text>
         </TouchableOpacity>

@@ -35,10 +35,10 @@ const SearchScreen = ({ navigation, route }) => {
         if (isEnd) return;
 
         try {
-            const verifiedSearch = search.replace(/[^a-zа-яё\s]/gi, "");
+            const verifiedSearch = search.replace("?", "");
 
             const response = await fetch(
-                URL_SEARCH + verifiedSearch + "?page=" + page
+                URL_SEARCH + encodeURI(verifiedSearch) + "?page=" + page
             );
             const json = await response.json();
             if (!json.length) {
@@ -64,7 +64,6 @@ const SearchScreen = ({ navigation, route }) => {
     useEffect(() => {
         console.log("useEffect");
         fetchData();
-        return null;
     }, [search]);
 
     const renderItem = ({ item }) => (
