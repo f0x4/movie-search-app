@@ -1,7 +1,7 @@
 import { StyleSheet, Text, View } from "react-native";
 import React from "react";
 import WebView from "react-native-webview";
-import { URL_PLAYER } from "../utils/constant";
+import { URL_PLAYER } from "../constants";
 
 const PlayerScreen = ({ route }) => {
     const movie = route.params.movie;

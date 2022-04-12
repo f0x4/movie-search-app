@@ -9,14 +9,21 @@ import {
 import React, { useEffect, useState } from "react";
 import FakeSearch from "../components/FakeSearch";
 import Poster from "../components/Poster";
-import { URL_SEARCH } from "../utils/constant";
+import { URL_SEARCH } from "../constants";
+import { useDispatch, useSelector } from "react-redux";
+import {
+    getData,
+    getStatus,
+    getIsEnd,
+    searchAsync,
+} from "../redux/slices/searchSlice";
 
 const SearchScreen = ({ navigation, route }) => {
     const [search, setSearch] = useState(route?.params?.search || "");
-    const [page, setPage] = useState(0);
-    const [isLoading, setLoading] = useState(false);
-    const [isEnd, setEnd] = useState(false);
-    const [data, setData] = useState([]);
+    // const status = useSelector(getStatus);
+    const data = useSelector(getData);
+    const isEnd = useSelector(getIsEnd);
+    const dispatch = useDispatch();
 
     // async function fetchData() {
     //     if (isEnd) return;
@@ -31,30 +38,8 @@ const SearchScreen = ({ navigation, route }) => {
     //     setData([...data, ...json]);
     // }
 
-    const fetchData = async () => {
-        if (isEnd) return;
-
-        try {
-            const verifiedSearch = search.replace("?", "");
-
-            const response = await fetch(
-                URL_SEARCH + encodeURI(verifiedSearch) + "?page=" + page
-            );
-            const json = await response.json();
-            if (!json.length) {
-                setEnd(true);
-                return;
-            }
-            setData([...data, ...json]);
-            setPage((page) => {
-                console.log(page++);
-                return page++;
-            });
-        } catch (error) {
-            console.error(error);
-        } finally {
-            setLoading(false);
-        }
+    const fetchData = () => {
+        dispatch(searchAsync(search));
     };
 
     const onEndReached = () => {

@@ -11,25 +11,28 @@ import SearchBar from "react-native-elements/dist/searchbar/SearchBar-android";
 import { Divider } from "react-native-elements";
 import { useNavigation } from "@react-navigation/native";
 import useDebounce from "../hooks/useDebounce";
+import { useDispatch, useSelector } from "react-redux";
+import {
+    autocompleteAsync,
+    clearData,
+    getData,
+} from "../redux/slices/autocompleteSlice";
 
 const AutocompleteScreen = ({ route }) => {
     const text = route?.params?.text;
     const [search, setSearch] = useState("" || text);
-    const [data, setData] = useState([]);
+    const data = useSelector(getData);
     const debouncedSearch = useDebounce(search, 800);
+
+    const dispatch = useDispatch();
     const navigation = useNavigation();
-    const url = "https://movie-search-api-mini.herokuapp.com/autocomplete/";
 
     useEffect(async () => {
         if (search.length <= 2) {
-            setData([]);
+            dispatch(clearData());
             return;
         }
-
-        const resp = await fetch(url + search);
-        const data = await resp.json();
-
-        setData(data);
+        dispatch(autocompleteAsync(search));
     }, [debouncedSearch]);
 
     const updateSearch = (search) => {
