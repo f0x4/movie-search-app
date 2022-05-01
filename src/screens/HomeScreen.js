@@ -1,10 +1,14 @@
-import { StatusBar, StyleSheet, Text, useColorScheme, View } from "react-native";
+import {
+    StatusBar,
+    StyleSheet,
+    Text,
+    useColorScheme,
+    View,
+} from "react-native";
 import React from "react";
 import FakeSearch from "../components/FakeSearch";
 
 const HomeScreen = () => {
-    const [x, y] = useColorScheme()
-    useCol
     return (
         <View style={[styles.marginTop, styles.container]}>
             <FakeSearch />

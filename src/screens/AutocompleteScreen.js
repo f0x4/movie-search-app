@@ -18,6 +18,7 @@ import {
     getData,
 } from "../redux/slices/autocompleteSlice";
 import { clearSearchData } from "../redux/slices/searchSlice";
+import PosterMini from "../components/PosterMini";
 
 const AutocompleteScreen = ({ route }) => {
     const text = route?.params?.text;
@@ -56,7 +57,17 @@ const AutocompleteScreen = ({ route }) => {
                 });
             }}
         >
-            <Text style={styles.title}>{item.name}</Text>
+            <PosterMini width={46} img={item.img} />
+            <View style={styles.textContainer}>
+                <Text style={styles.title} ellipsizeMode="tail">
+                    {item.name}
+                </Text>
+                <Text style={styles.subtitle}>
+                    {item.isSeries ? "Сериал" : "Фильм"}
+                    {", "}
+                    {item.year}
+                </Text>
+            </View>
         </TouchableOpacity>
     );
 
@@ -81,6 +92,7 @@ const AutocompleteScreen = ({ route }) => {
                 onChangeText={updateSearch}
                 value={search}
                 inputStyle={styles.input}
+                selectionColor={"#0060ff"}
                 onSubmitEditing={onSubmitEditing}
             />
             <Divider
@@ -113,15 +125,24 @@ const styles = StyleSheet.create({
         height: 1,
     },
     item: {
-        justifyContent: "center",
+        display: "flex",
+        flexDirection: "row",
+        alignItems: "center",
         marginVertical: 5,
         minHeight: 46,
+    },
+    textContainer: {
+        flexShrink: 1,
+        marginLeft: 13,
+        marginRight: 46,
     },
     title: {
         fontSize: 16,
         color: "#202124",
-        marginLeft: 60,
-        marginRight: 45,
+    },
+    subtitle: {
+        fontSize: 12,
+        color: "#767676",
     },
     input: {
         fontSize: 16,
