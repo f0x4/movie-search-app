@@ -1,7 +1,8 @@
 import {
+    ActivityIndicator,
     FlatList,
-    StatusBar,
     StyleSheet,
+    StatusBar,
     Text,
     TouchableOpacity,
     View,
@@ -9,34 +10,22 @@ import {
 import React, { useEffect, useState } from "react";
 import FakeSearch from "../components/FakeSearch";
 import Poster from "../components/Poster";
-import { URL_SEARCH } from "../constants";
 import { useDispatch, useSelector } from "react-redux";
 import {
     getData,
     getStatus,
     getIsEnd,
     searchAsync,
+    getShowIndicator,
 } from "../redux/slices/searchSlice";
+import { BlurView } from "expo-blur";
 
 const SearchScreen = ({ navigation, route }) => {
     const [search, setSearch] = useState(route?.params?.search || "");
-    // const status = useSelector(getStatus);
+    const status = useSelector(getStatus);
+    const showIndicator = useSelector(getShowIndicator);
     const data = useSelector(getData);
-    const isEnd = useSelector(getIsEnd);
     const dispatch = useDispatch();
-
-    // async function fetchData() {
-    //     if (isEnd) return;
-
-    //     const resp = await fetch(URL_SEARCH + search);
-    //     const json = await resp.json();
-
-    //     if (json == []) {
-    //         setEnd(true);
-    //         return;
-    //     }
-    //     setData([...data, ...json]);
-    // }
 
     const fetchData = () => {
         dispatch(searchAsync(search));
@@ -47,7 +36,6 @@ const SearchScreen = ({ navigation, route }) => {
     };
 
     useEffect(() => {
-        console.log("useEffect");
         fetchData();
     }, [search]);
 
@@ -57,14 +45,26 @@ const SearchScreen = ({ navigation, route }) => {
             onPress={() => navigation.navigate("MovieScreen", { movie: item })}
         >
             <Poster img={item.img} />
-            <Text style={styles.title}>{item.name}</Text>
+            <Text style={{ textAlign: "center" }}>{item.name}</Text>
         </TouchableOpacity>
     );
 
     return (
         <View style={styles.container}>
-            <FakeSearch text={search} />
+            <BlurView style={styles.header} intensity={120} tint="light">
+                <FakeSearch text={search} />
+            </BlurView>
+
+            {showIndicator && (
+                <ActivityIndicator
+                    style={styles.center}
+                    size="large"
+                    color="#1976d2"
+                />
+            )}
+
             <FlatList
+                style={styles.list}
                 data={data}
                 renderItem={renderItem}
                 keyExtractor={(item) => item._id}
@@ -83,13 +83,22 @@ export default SearchScreen;
 const styles = StyleSheet.create({
     container: {
         flex: 1,
-        margin: 10,
-        marginBottom: 0,
-        marginTop: StatusBar.currentHeight + 10,
+    },
+    header: {
+        width: "100%",
+        position: "absolute",
+        zIndex: 99,
+
+        paddingTop: StatusBar.currentHeight + 7,
+        paddingBottom: 7,
+        paddingHorizontal: 6,
+    },
+    list: {
+        paddingTop: StatusBar.currentHeight + 13,
     },
     item: {
         flex: 1 / 3,
         margin: 5,
     },
-    list: {},
+    center: { flex: 1, alignSelf: "center" },
 });

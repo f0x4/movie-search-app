@@ -18,6 +18,8 @@
             "supportsTablet": true
         },
         "android": {
+            "package": "com.f0x4.mark1",
+            "versionCode": 1,
             "adaptiveIcon": {
                 "foregroundImage": "./src/assets/adaptive-icon.png",
                 "backgroundColor": "#FFFFFF"

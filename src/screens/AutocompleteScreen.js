@@ -17,6 +17,7 @@ import {
     clearData,
     getData,
 } from "../redux/slices/autocompleteSlice";
+import { clearSearchData } from "../redux/slices/searchSlice";
 
 const AutocompleteScreen = ({ route }) => {
     const text = route?.params?.text;
@@ -42,7 +43,8 @@ const AutocompleteScreen = ({ route }) => {
     const renderItem = ({ item }) => (
         <TouchableOpacity
             style={styles.item}
-            onPress={() =>
+            onPress={() => {
+                dispatch(clearSearchData());
                 navigation.reset({
                     routes: [
                         { name: "AppTabsNavigator" },
@@ -51,14 +53,15 @@ const AutocompleteScreen = ({ route }) => {
                             params: { search: item.name },
                         },
                     ],
-                })
-            }
+                });
+            }}
         >
             <Text style={styles.title}>{item.name}</Text>
         </TouchableOpacity>
     );
 
     const onSubmitEditing = () => {
+        dispatch(clearSearchData());
         navigation.reset({
             routes: [
                 { name: "AppTabsNavigator" },

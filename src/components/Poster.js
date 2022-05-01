@@ -16,7 +16,7 @@ const Poster = ({ img, width }) => {
         <Image
             source={{ uri: URL_IMG + img + IMG_SIZE }}
             style={[styles.base, width && { width: width }]}
-            resizeMode="contain"
+            resizeMode="cover"
         />
     );
 };
@@ -26,7 +26,7 @@ export default Poster;
 const styles = StyleSheet.create({
     base: {
         aspectRatio: 140 / 210,
-        borderRadius: 6,
+        borderRadius: 7,
     },
     noImage: {
         display: "flex",
